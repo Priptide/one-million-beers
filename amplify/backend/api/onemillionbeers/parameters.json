@@ -1,0 +1,6 @@
+{
+  "AppSyncApiName": "onemillionbeers",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2024-09-14T17:12:44.972Z"
+}

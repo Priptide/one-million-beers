@@ -1,0 +1,27 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-onemillionbeers-dev-ac589-authRole",
+      "UnauthRoleArn": "arn:aws:iam::306769102733:role/amplify-onemillionbeers-dev-ac589-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::306769102733:role/amplify-onemillionbeers-dev-ac589-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-onemillionbeers-dev-ac589-deployment",
+      "UnauthRoleName": "amplify-onemillionbeers-dev-ac589-unauthRole",
+      "StackName": "amplify-onemillionbeers-dev-ac589",
+      "StackId": "arn:aws:cloudformation:eu-west-2:306769102733:stack/amplify-onemillionbeers-dev-ac589/0dc7acb0-6fb8-11ef-9fbe-0af3b4dd8fef",
+      "AmplifyAppId": "d1n92is8hhxa2h"
+    },
+    "categories": {
+      "api": {
+        "onemillionbeers": {}
+      },
+      "auth": {
+        "onemillionbeers16d6c520": {}
+      },
+      "storage": {
+        "masterDb": {},
+        "dynamo90128c8e": {}
+      }
+    }
+  }
+}

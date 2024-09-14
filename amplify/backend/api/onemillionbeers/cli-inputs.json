@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "onemillionbeers",
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 365,
+      "apiKeyExpirationDate": "2025-09-14T17:12:41.046Z",
+      "keyDescription": "MillionBeersApi"
+    },
+    "additionalAuthTypes": [],
+    "conflictResolution": {}
+  }
+}

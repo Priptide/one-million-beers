@@ -1,0 +1,15 @@
+{
+  "resourceName": "masterDb",
+  "policyUUID": "2c55f01d",
+  "bucketName": "onemillionbeers5fdbbea6410c44e1bcd8ed97fbcfadc6",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ"
+  ],
+  "groupAccess": {}
+}

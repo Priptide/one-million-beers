@@ -2,6 +2,7 @@
   "expo": {
     "name": "one-million-beers",
     "slug": "one-million-beers",
+    "scheme": "one-million-beers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +13,9 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "usesAppleSignIn": true,
+      "bundleIdentifier": "com.CharlieCrooke.OneMillionBeers"
     },
     "android": {
       "adaptiveIcon": {
@@ -22,6 +25,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-apple-authentication",
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "634bf32e-429f-4152-a3f2-d9479bdc890a"
+      }
     }
   }
 }
