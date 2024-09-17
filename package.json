@@ -17,6 +17,7 @@
     "aws-amplify": "^6.6.0",
     "expo": "~51.0.28",
     "expo-apple-authentication": "~6.4.2",
+    "expo-camera": "~15.0.16",
     "expo-file-system": "~17.0.1",
     "expo-secure-store": "~13.0.2",
     "expo-status-bar": "~1.12.1",
