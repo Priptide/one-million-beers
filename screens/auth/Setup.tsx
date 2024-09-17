@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { updateUser } from "../../src/graphql/mutations";
+import React from "react";
 
 export default function Setup(props: {
   setUser: (user: User) => void;

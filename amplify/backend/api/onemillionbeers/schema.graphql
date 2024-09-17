@@ -3,7 +3,7 @@
 input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
 }
-type User @model {
+type User @model @searchable {
   id: String! @primaryKey
   username: String
   initialCount: Int

@@ -81,7 +81,7 @@ const App = () => {
     <View style={styles.container}>
       {user ? (
         user.initialCount !== null && user.username !== null ? (
-          <BeerCount user={user} />
+          <BeerCount user={user} setUser={updateUser} />
         ) : (
           <Setup setUser={updateUser} user={user} />
         )
