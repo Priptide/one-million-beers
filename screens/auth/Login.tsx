@@ -3,6 +3,7 @@ import { generateClient } from "aws-amplify/api";
 import { View, Text, StyleSheet } from "react-native";
 import { createUser } from "../../src/graphql/mutations";
 import { getUser } from "../../src/graphql/queries";
+import React from "react";
 
 export default function Login(props: { setUser: (user: User) => void }) {
   const client = generateClient();

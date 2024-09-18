@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Button,
   ImageBackground,
   StyleSheet,
@@ -82,9 +83,19 @@ export default function CameraPage(props: {
       const response = await fetch(capturedImage.uri);
       const blob = await response.blob();
 
-      const result = await uploadData({
+      const recentImage: RecentImage = {
+        path: `public/images/${props.user.id}/${Date.now().toString()}.jpg`,
+        username: props.user.username ?? "Unknown User",
+      };
+
+      await uploadData({
         path: `public/images/${props.user.id}/${Date.now().toString()}.jpg`,
         data: blob,
+      }).result;
+
+      await uploadData({
+        path: `public/most_recent_image.json`,
+        data: JSON.stringify(recentImage),
       }).result;
 
       const updatedUser: User = {
@@ -152,18 +163,16 @@ export default function CameraPage(props: {
                   height: 60,
                   bottom: 0,
                   borderRadius: 50,
-                  backgroundColor: "#fff",
+                  backgroundColor: "#0ba6ff",
                   justifyContent: "center",
                   alignItems: "center",
                 }}
               >
-                <Text
-                  style={{
-                    fontSize: 22,
-                  }}
-                >
-                  Submit beer
-                </Text>
+                {loading ? (
+                  <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                  <Text style={styles.text}>Submit beer</Text>
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -237,11 +246,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "flex-end",
     alignItems: "center",
+    backgroundColor: "#00aeff",
   },
   text: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 16,
     color: "white",
+    fontFamily: "RubikMono",
   },
   header: {
     paddingTop: 60,

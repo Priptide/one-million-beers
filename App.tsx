@@ -1,8 +1,7 @@
 import * as SecureStore from "expo-secure-store";
-
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-
+import { useFonts } from "expo-font";
 import { Amplify } from "aws-amplify";
 import BeerCount from "./screens/count/BeerCount";
 import { Hub } from "@aws-amplify/core";
@@ -35,6 +34,10 @@ const App = () => {
   const [user, setUser] = useState<User | null>(null);
   const [userCheck, setUserCheck] = useState<boolean>(false);
   const client = generateClient();
+
+  const [loaded, error] = useFonts({
+    RubikMono: require("./fonts/RubikMonoOne-Regular.ttf"),
+  });
 
   useEffect(() => {
     console.log("Refreshed on user");
