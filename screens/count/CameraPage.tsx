@@ -17,7 +17,7 @@ import React, { useRef } from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useState } from "react";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { uploadData } from "aws-amplify/storage";
+import { uploadData, remove } from "aws-amplify/storage";
 import { generateClient } from "aws-amplify/api";
 import { updateUser } from "../../src/graphql/mutations";
 
@@ -86,6 +86,7 @@ export default function CameraPage(props: {
       const recentImage: RecentImage = {
         path: `public/images/${props.user.id}/${Date.now().toString()}.jpg`,
         username: props.user.username ?? "Unknown User",
+        id: props.user.id,
       };
 
       await uploadData({
@@ -93,10 +94,19 @@ export default function CameraPage(props: {
         data: blob,
       }).result;
 
-      await uploadData({
+      try {
+        await remove({
+          path: `public/most_recent_image.json`,
+        });
+      } catch (error) {}
+
+      const res = await uploadData({
         path: `public/most_recent_image.json`,
         data: JSON.stringify(recentImage),
       }).result;
+
+      console.log("Res");
+      console.log(res);
 
       const updatedUser: User = {
         id: props.user.id,

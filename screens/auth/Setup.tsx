@@ -77,32 +77,39 @@ export default function Setup(props: {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => setUsername(text)}
-        value={username}
-        placeholder="Username"
-      />
-      <TextInput
-        style={styles.input}
-        onChangeText={(text) => {
-          if (text === undefined) {
-            console.log("2");
-            return;
-          }
+      <View style={styles.header}>
+        <Text style={styles.title}>
+          Welcome, please enter a username and your current lifetime beer count.
+        </Text>
+      </View>
+      <View style={styles.body}>
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => setUsername(text)}
+          value={username}
+          placeholder="Username"
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={(text) => {
+            if (text === undefined) {
+              console.log("2");
+              return;
+            }
 
-          var value = parseInt(text);
+            var value = parseInt(text);
 
-          if (!Number.isNaN(value)) {
-            setInitialCount(value.toString());
-          } else {
-            setInitialCount("");
-          }
-        }}
-        value={initialCount}
-        placeholder="Beer Count"
-        keyboardType="numeric"
-      />
+            if (!Number.isNaN(value)) {
+              setInitialCount(value.toString());
+            } else {
+              setInitialCount("");
+            }
+          }}
+          value={initialCount}
+          placeholder="Beer Count"
+          keyboardType="numeric"
+        />
+      </View>
       <Pressable
         style={styles.button}
         onPress={() => {
@@ -124,30 +131,49 @@ export default function Setup(props: {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  header: {
+    height: "20%",
+    width: "80%",
+    justifyContent: "center",
+  },
+  title: {
+    fontFamily: "RubikMono",
+    fontSize: 18,
+    textAlign: "center",
+  },
+  body: {
+    width: "100%",
+    height: "30%",
     alignItems: "center",
     justifyContent: "center",
   },
   input: {
+    width: "60%",
     height: 40,
     margin: 12,
     borderWidth: 1,
     padding: 10,
+    fontFamily: "RubikMono",
   },
   button: {
+    width: "40%",
+    height: 50,
+    borderRadius: 40,
+    backgroundColor: "#0ba6ff",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
-    borderRadius: 4,
     elevation: 3,
-    backgroundColor: "black",
   },
   text: {
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: "bold",
-    letterSpacing: 0.25,
+    fontFamily: "RubikMono",
+    fontSize: 15,
     color: "white",
   },
 });

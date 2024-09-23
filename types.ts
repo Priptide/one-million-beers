@@ -7,5 +7,6 @@ type User = {
 
 type RecentImage = {
     path: string;
+    id?: string;
     username: string;
 }

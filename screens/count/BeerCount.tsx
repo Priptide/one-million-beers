@@ -6,9 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CameraPage from "./CameraPage";
-import { generateClient } from "aws-amplify/api";
+import { generateClient, head } from "aws-amplify/api";
 import { onUpdateUser } from "../../src/graphql/subscriptions";
 import { searchUsers } from "../../src/graphql/queries";
 import {
@@ -18,13 +18,13 @@ import {
 } from "../../src/API";
 import { downloadData, getUrl } from "aws-amplify/storage";
 import { Subscription } from "expo-apple-authentication";
+import BeerCounter from "./BeerCounter";
 
 export default function BeerCount(props: {
   user: User;
   setUser: (user: User) => void;
 }) {
   const [showCamera, setShowCamera] = useState(false);
-  const [globalCount, setGlobalCount] = useState(0);
   const [initialLoad, setInitialLoad] = useState(false);
   const [mostRecentImage, setMostRecentImage] = useState<RecentImage>();
   const [imagePath, setImagePath] = useState<string>();
@@ -37,52 +37,25 @@ export default function BeerCount(props: {
     setShowCamera(!showCamera);
   };
 
-  const updateGlobalCount = async () => {
-    const initialCount = await client.graphql({
-      query: searchUsers,
-      variables: {
-        aggregates: [
-          {
-            name: "totalInitialCount",
-            type: SearchableAggregateType.sum,
-            field: SearchableUserAggregateField.initialCount,
-          },
-          {
-            name: "totalCurrentCount",
-            type: SearchableAggregateType.sum,
-            field: SearchableUserAggregateField.currentCount,
-          },
-        ],
-      },
-    });
-
-    var result = initialCount.data as SearchUsersQuery;
-
-    var fullTotal = result.searchUsers?.aggregateItems
-      .map((x) =>
-        x?.result?.__typename !== "SearchableAggregateBucketResult"
-          ? x?.result?.value
-          : 0
-      )
-      .reduce((a, b) => (a ?? 0) + (b ?? 0), 0);
-
-    console.log(result.searchUsers?.aggregateItems);
-    console.log(fullTotal);
-    setGlobalCount(1000000 - (fullTotal ?? 0));
-
+  const updateRecentImage = useCallback(async () => {
     try {
       var recentS3 = await downloadData({
         path: `public/most_recent_image.json`,
+        // options: {
+        //   cacheControl: "no-cache",
+        // },
       }).result;
 
       console.log(recentS3);
 
       var recentS3Json = await recentS3.body.text();
+
+      console.log(recentS3Json);
       setMostRecentImage(JSON.parse(recentS3Json) as RecentImage);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (mostRecentImage)
@@ -97,14 +70,14 @@ export default function BeerCount(props: {
     if (createSub === undefined) {
       createSub = client.graphql({ query: onUpdateUser }).subscribe({
         next: ({ data }) => {
-          updateGlobalCount();
+          updateRecentImage();
         },
         error: (error) => console.warn(error),
       });
     }
 
     if (!initialLoad) {
-      updateGlobalCount();
+      updateRecentImage();
       setInitialLoad(true);
     }
   }, []);
@@ -117,27 +90,34 @@ export default function BeerCount(props: {
     />
   ) : (
     <View style={styles.container}>
-      <View style={styles.countContainer}>
-        <Text style={styles.title}>Beers left to drink:</Text>
-        <View style={styles.numberContainer}>
-          {globalCount
-            .toString()
-            .padStart(7, "0")
-            .split("")
-            .slice(-7)
-            .map((value, i) => {
-              return (
-                <View style={styles.numberPanel} key={i}>
-                  <Text style={styles.numberText}>{value}</Text>
-                </View>
-              );
-            })}
-        </View>
+      <View style={styles.header}>
+        <Text
+          style={[
+            styles.title,
+            {
+              textAlign: "center",
+              lineHeight: 30,
+              fontSize: 20,
+              color: "#0ba6ff",
+            },
+          ]}
+        >
+          Hi {props.user.username},{"\n"}Time for a beer?
+        </Text>
       </View>
+      <BeerCounter />
       {imagePath && mostRecentImage ? (
         <View style={styles.lastBeerContainer}>
-          <Text style={styles.lastBeerText}>
-            Last beer drank by: {mostRecentImage.username}
+          <Text style={[styles.lastBeerText]}>
+            Last beer drank by:{" "}
+            <Text
+              style={{
+                color:
+                  mostRecentImage.id == props.user.id ? "#0ba6ff" : "black",
+              }}
+            >
+              {mostRecentImage.username}
+            </Text>
           </Text>
           <View style={styles.lastBeerImageContainer}>
             <Image
@@ -180,10 +160,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  countContainer: {
-    flex: 1,
+  header: {
+    height: "18%",
     alignItems: "center",
-    paddingTop: "35%",
+    justifyContent: "flex-end",
+    paddingBottom: "7%",
   },
   title: {
     fontFamily: "RubikMono",
@@ -201,7 +182,7 @@ const styles = StyleSheet.create({
     height: 220,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 15,
+    borderRadius: 10,
   },
   lastBeerImage: {
     width: 200,
@@ -210,13 +191,6 @@ const styles = StyleSheet.create({
   lastBeerText: {
     fontFamily: "RubikMono",
     fontSize: 14,
-  },
-  numberContainer: {
-    flexDirection: "row",
-    width: "90%",
-    height: 100,
-    alignItems: "center",
-    justifyContent: "center",
   },
   numberPanel: {
     width: "13%",
