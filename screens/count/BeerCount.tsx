@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     paddingBottom: "7%",
   },
   title: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 18,
   },
   lastBeerContainer: {
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     height: 200,
   },
   lastBeerText: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 14,
   },
   numberPanel: {
@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
   },
   numberText: {
     color: "white",
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 24,
   },
   userNumberContainer: {
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   subtitle: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 15,
   },
   footer: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   addButtonText: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 15,
     color: "white",
   },

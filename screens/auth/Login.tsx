@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   title: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-RegularOne",
     fontSize: 20,
     textAlign: "center",
   },

@@ -3,15 +3,10 @@
     "name": "one-million-beers",
     "slug": "one-million-beers",
     "scheme": "one-million-beers",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "ios": {
       "supportsTablet": true,
       "usesAppleSignIn": true,
@@ -40,7 +35,7 @@
       [
         "expo-font",
         {
-          "fonts": ["./fonts/RubikMonoOne-Regular.ttf"]
+          "fonts": ["./assets/fonts/RubikMonoOne-Regular.ttf"]
         }
       ]
     ],

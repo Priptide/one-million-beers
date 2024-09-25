@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     color: "white",
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
   },
   header: {
     paddingTop: 60,

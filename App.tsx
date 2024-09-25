@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { Amplify } from "aws-amplify";
@@ -36,7 +36,7 @@ const App = () => {
   const client = generateClient();
 
   const [loaded, error] = useFonts({
-    RubikMono: require("./fonts/RubikMonoOne-Regular.ttf"),
+    "RubikMonoOne-Regular": require("./assets/fonts/RubikMonoOne-Regular.ttf"),
   });
 
   useEffect(() => {

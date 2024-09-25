@@ -100,7 +100,7 @@ export default function BeerCounter() {
 
 const styles = StyleSheet.create({
   title: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 18,
   },
   countContainer: {
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   numberText: {
     color: "white",
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 24,
   },
 });

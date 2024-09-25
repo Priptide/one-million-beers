@@ -7,9 +7,12 @@ import {
   Pressable,
   Text,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { updateUser } from "../../src/graphql/mutations";
 import React from "react";
+import * as Font from "expo-font";
 
 export default function Setup(props: {
   setUser: (user: User) => void;
@@ -76,56 +79,59 @@ export default function Setup(props: {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>
-          Welcome, please enter a username and your current lifetime beer count.
-        </Text>
-      </View>
-      <View style={styles.body}>
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => setUsername(text)}
-          value={username}
-          placeholder="Username"
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={(text) => {
-            if (text === undefined) {
-              console.log("2");
-              return;
-            }
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>
+            Welcome, please enter a username and your current lifetime beer
+            count.
+          </Text>
+        </View>
+        <View style={styles.body}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => setUsername(text)}
+            value={username}
+            placeholder="Your name"
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              if (text === undefined) {
+                console.log("2");
+                return;
+              }
 
-            var value = parseInt(text);
+              var value = parseInt(text);
 
-            if (!Number.isNaN(value)) {
-              setInitialCount(value.toString());
-            } else {
-              setInitialCount("");
-            }
+              if (!Number.isNaN(value)) {
+                setInitialCount(value.toString());
+              } else {
+                setInitialCount("");
+              }
+            }}
+            value={initialCount}
+            placeholder="Beer Count"
+            keyboardType="numeric"
+          />
+        </View>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            setLoading(true);
+            onPress()
+              .catch((e: any) => {
+                console.log(e);
+              })
+              .finally(() => {
+                setLoading(false);
+              });
           }}
-          value={initialCount}
-          placeholder="Beer Count"
-          keyboardType="numeric"
-        />
+        >
+          <Text style={styles.text}>Submit</Text>
+        </Pressable>
       </View>
-      <Pressable
-        style={styles.button}
-        onPress={() => {
-          setLoading(true);
-          onPress()
-            .catch((e: any) => {
-              console.log(e);
-            })
-            .finally(() => {
-              setLoading(false);
-            });
-        }}
-      >
-        <Text style={styles.text}>Submit</Text>
-      </Pressable>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -142,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 18,
     textAlign: "center",
   },
@@ -158,7 +164,7 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
   },
   button: {
     width: "40%",
@@ -172,7 +178,7 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   text: {
-    fontFamily: "RubikMono",
+    fontFamily: "RubikMonoOne-Regular",
     fontSize: 15,
     color: "white",
   },
