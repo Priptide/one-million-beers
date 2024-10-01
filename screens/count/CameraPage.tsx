@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Button,
   ImageBackground,
   StyleSheet,
@@ -61,11 +62,19 @@ export default function CameraPage(props: {
   }
 
   const __takePicture = async () => {
-    if (!camera.current) return;
+    setLoading(false);
+
+    if (!camera.current) {
+      Alert.alert("No current camera", "Internal error.", [{ text: "OK" }]);
+      return;
+    }
 
     const photo = await camera.current.takePictureAsync();
 
-    if (!photo) return;
+    if (!photo) {
+      Alert.alert("No photo taken", "Internal error.", [{ text: "OK" }]);
+      return;
+    }
 
     console.log(photo);
     setPreviewVisible(true);
@@ -130,11 +139,12 @@ export default function CameraPage(props: {
       props.setUser(updatedUser);
 
       props.closeCamera();
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error : ", error);
+      Alert.alert("Internal error", error ?? "Unknown", [{ text: "OK" }]);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
