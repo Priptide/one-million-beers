@@ -10,3 +10,14 @@ type RecentImage = {
     id?: string;
     username: string;
 }
+
+type RootStackParamList = {
+    BeerCount: {
+        user: User;
+        // setUser: (user: User) => void;
+    };
+    CameraPage: {
+        user: User;
+        // setUser: (user: User) => void;
+    }
+};

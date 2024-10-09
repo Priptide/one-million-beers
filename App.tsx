@@ -1,16 +1,18 @@
 import * as SecureStore from "expo-secure-store";
-import { Alert, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useEffect, useState } from "react";
 import { useFonts } from "expo-font";
 import { Amplify } from "aws-amplify";
 import BeerCount from "./screens/count/BeerCount";
-import { Hub } from "@aws-amplify/core";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./screens/auth/Login";
 import React from "react";
 import Setup from "./screens/auth/Setup";
 import amplifyconfig from "./amplifyconfiguration.json";
 import { generateClient } from "aws-amplify/api";
 import { getUser } from "./src/graphql/queries";
+import CameraPage from "./screens/count/CameraPage";
 
 Amplify.configure(amplifyconfig);
 
@@ -29,6 +31,8 @@ async function getValueFor(key: string): Promise<string | null> {
 
   return result;
 }
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -84,7 +88,19 @@ const App = () => {
     <View style={styles.container}>
       {user ? (
         user.initialCount !== null && user.username !== null ? (
-          <BeerCount user={user} setUser={updateUser} />
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="BeerCount"
+              screenOptions={{ headerShown: false }}
+            >
+              <Stack.Screen
+                name="BeerCount"
+                component={BeerCount}
+                initialParams={{ user: user }}
+              />
+              <Stack.Screen name="CameraPage" component={CameraPage} />
+            </Stack.Navigator>
+          </NavigationContainer>
         ) : (
           <Setup setUser={updateUser} user={user} />
         )
@@ -101,7 +117,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });

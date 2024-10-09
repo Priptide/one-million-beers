@@ -21,12 +21,12 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { uploadData, remove } from "aws-amplify/storage";
 import { generateClient } from "aws-amplify/api";
 import { updateUser } from "../../src/graphql/mutations";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-export default function CameraPage(props: {
-  closeCamera: () => void;
-  user: User;
-  setUser: (user: User) => void;
-}) {
+type Props = NativeStackScreenProps<RootStackParamList, "CameraPage">;
+
+export default function CameraPage({ route, navigation }: Props) {
+  const { user } = route.params;
   const [facing, setFacing] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
 
@@ -93,13 +93,13 @@ export default function CameraPage(props: {
       const blob = await response.blob();
 
       const recentImage: RecentImage = {
-        path: `public/images/${props.user.id}/${Date.now().toString()}.jpg`,
-        username: props.user.username ?? "Unknown User",
-        id: props.user.id,
+        path: `public/images/${user.id}/${Date.now().toString()}.jpg`,
+        username: user.username ?? "Unknown User",
+        id: user.id,
       };
 
       await uploadData({
-        path: `public/images/${props.user.id}/${Date.now().toString()}.jpg`,
+        path: `public/images/${user.id}/${Date.now().toString()}.jpg`,
         data: blob,
       }).result;
 
@@ -118,10 +118,10 @@ export default function CameraPage(props: {
       console.log(res);
 
       const updatedUser: User = {
-        id: props.user.id,
-        username: props.user.username,
-        initialCount: props.user.initialCount,
-        currentCount: props.user.currentCount + 1,
+        id: user.id,
+        username: user.username,
+        initialCount: user.initialCount,
+        currentCount: user.currentCount + 1,
       };
 
       const updateRequest = await client.graphql({
@@ -136,9 +136,9 @@ export default function CameraPage(props: {
         console.warn(updateRequest.errors);
       }
 
-      props.setUser(updatedUser);
+      // setUser(updatedUser);
 
-      props.closeCamera();
+      navigation.pop();
     } catch (error: any) {
       console.log("Error : ", error);
       Alert.alert("Internal error", error ?? "Unknown", [{ text: "OK" }]);
@@ -204,7 +204,7 @@ export default function CameraPage(props: {
               name="arrow-back-sharp"
               size={28}
               color="white"
-              onPress={props.closeCamera}
+              onPress={() => navigation.pop()}
             />
             <MaterialCommunityIcons
               name="camera-flip-outline"

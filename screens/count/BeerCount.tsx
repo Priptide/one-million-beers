@@ -10,32 +10,21 @@ import React, { useCallback, useEffect, useState } from "react";
 import CameraPage from "./CameraPage";
 import { generateClient, head } from "aws-amplify/api";
 import { onUpdateUser } from "../../src/graphql/subscriptions";
-import { searchUsers } from "../../src/graphql/queries";
-import {
-  SearchableAggregateType,
-  SearchableUserAggregateField,
-  SearchUsersQuery,
-} from "../../src/API";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { downloadData, getUrl } from "aws-amplify/storage";
 import { Subscription } from "expo-apple-authentication";
 import BeerCounter from "./BeerCounter";
 
-export default function BeerCount(props: {
-  user: User;
-  setUser: (user: User) => void;
-}) {
-  const [showCamera, setShowCamera] = useState(false);
+type Props = NativeStackScreenProps<RootStackParamList, "BeerCount">;
+
+export default function BeerCount({ route, navigation }: Props) {
+  const { user } = route.params;
   const [initialLoad, setInitialLoad] = useState(false);
   const [mostRecentImage, setMostRecentImage] = useState<RecentImage>();
   const [imagePath, setImagePath] = useState<string>();
-  const [subscription, setSubscription] = useState<Subscription>();
 
   let createSub: any = undefined;
   const client = generateClient();
-
-  const flipCameraState = () => {
-    setShowCamera(!showCamera);
-  };
 
   const updateRecentImage = useCallback(async () => {
     try {
@@ -47,6 +36,7 @@ export default function BeerCount(props: {
       }).result;
 
       console.log(recentS3);
+      console.log("MOST RECENT");
 
       var recentS3Json = await recentS3.body.text();
 
@@ -82,13 +72,7 @@ export default function BeerCount(props: {
     }
   }, []);
 
-  return showCamera ? (
-    <CameraPage
-      closeCamera={flipCameraState}
-      user={props.user}
-      setUser={props.setUser}
-    />
-  ) : (
+  return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text
@@ -102,7 +86,7 @@ export default function BeerCount(props: {
             },
           ]}
         >
-          Hi {props.user.username},{"\n"}Time for a beer?
+          Hi {user.username},{"\n"}Time for a beer?
         </Text>
       </View>
       <BeerCounter />
@@ -112,8 +96,7 @@ export default function BeerCount(props: {
             Last beer drank by:{" "}
             <Text
               style={{
-                color:
-                  mostRecentImage.id == props.user.id ? "#0ba6ff" : "black",
+                color: mostRecentImage.id == user.id ? "#0ba6ff" : "black",
               }}
             >
               {mostRecentImage.username}
@@ -133,7 +116,7 @@ export default function BeerCount(props: {
       )}
       <Text style={styles.subtitle}>Beers consumed</Text>
       <View style={styles.userNumberContainer}>
-        {((props.user.initialCount ?? 0) + props.user.currentCount)
+        {((user.initialCount ?? 0) + user.currentCount)
           .toString()
           .split("")
           .map((value, i) => {
@@ -145,7 +128,10 @@ export default function BeerCount(props: {
           })}
       </View>
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton} onPress={flipCameraState}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigation.push("CameraPage", { user: user })}
+        >
           <Text style={styles.addButtonText}>Add beer</Text>
         </TouchableOpacity>
       </View>
